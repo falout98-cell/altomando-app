@@ -35,7 +35,8 @@ function PokemonMazoInput({ value, onChange, placeholder, size = "normal" }: any
     }
   }, [busqueda, enfocado])
 
-  const spriteUrl = value ? `https://play.pokemonshowdown.com/sprites/dex/${value.toLowerCase().replace(/[^a-z0-9]/g, '')}.png` : null;
+  // CORRECCIÓN 1: Cambiado 'null' por 'undefined' para que Vercel no se queje
+  const spriteUrl = value ? `https://play.pokemonshowdown.com/sprites/dex/${value.toLowerCase().replace(/[^a-z0-9]/g, '')}.png` : undefined;
 
   if (value) {
     return (
@@ -77,7 +78,7 @@ function PokemonMazoInput({ value, onChange, placeholder, size = "normal" }: any
              onChange(busqueda);
            }
          }}
-         onKeyDown={(e) => {
+         onKeyDown={(e: any) => {
            if (e.key === 'Enter' && busqueda) {
              onChange(busqueda);
              setEnfocado(false);
@@ -88,10 +89,10 @@ function PokemonMazoInput({ value, onChange, placeholder, size = "normal" }: any
        />
        {enfocado && sugerencias.length > 0 && (
           <div className="absolute top-full left-0 z-50 bg-white border-2 border-[#b67b4c] rounded-md shadow-xl w-36 max-h-48 overflow-y-auto mt-1">
-             {sugerencias.map(p => (
+             {sugerencias.map((p: string) => (
                 <div
                   key={p}
-                  onMouseDown={(e) => {
+                  onMouseDown={(e: any) => {
                     e.preventDefault(); 
                     onChange(p);
                     setBusqueda(p);
@@ -132,11 +133,12 @@ function Bo3Selector({ resultado, onChange }: any) {
 
   return (
     <div className="flex gap-1">
-      {partes.map((p, i) => (
+      {/* CORRECCIÓN 2: Declarado explícitamente el tipo de p y de i */}
+      {partes.map((p: string, i: number) => (
          <select 
             key={i} 
             value={p} 
-            onChange={e => handleChange(i, e.target.value)} 
+            onChange={(e: any) => handleChange(i, e.target.value)} 
             className={`text-[10px] font-black px-1 py-1 rounded-md border outline-none appearance-none cursor-pointer text-center w-8 shrink-0 shadow-sm ${colorLetra(p)}`}
          >
             <option value="">-</option>
@@ -157,16 +159,10 @@ const obtenerEstadoRonda = (resultado: string) => {
   const l = (resultado.match(/L/g) || []).length;
   const t = (resultado.match(/T/g) || []).length;
 
-  // Si no hay ningún resultado todavía
   if (w === 0 && l === 0 && t === 0) return 'pendiente';
-
-  // Quien tenga más victorias que derrotas, gana la ronda (sirve para "W" y para "WW" o "WT")
   if (w > l) return 'victoria';
-  
-  // Quien tenga más derrotas que victorias, pierde la ronda
   if (l > w) return 'derrota';
   
-  // Si tienen el mismo número de W y L (ej. "WL"), o es un empate puro ("T")
   return 'empate';
 }
 
@@ -296,7 +292,7 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
   }
 
   const obtenerSpriteUrl = (nombrePokemon: string) => {
-    if (!nombrePokemon) return null;
+    if (!nombrePokemon) return undefined;
     const formatted = nombrePokemon.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
     return `https://play.pokemonshowdown.com/sprites/dex/${formatted}.png`;
   }
@@ -418,7 +414,6 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
                           const spriteOp2 = obtenerSpriteUrl(op2)
                           const resultadosBo3 = (ronda.resultado || "").split('')
 
-                          // APLICAMOS LA LÓGICA DE COLORES
                           const estadoRonda = obtenerEstadoRonda(ronda.resultado || "");
                           let claseFondoRonda = puedeEditar ? 'bg-white border-gray-200' : 'bg-gray-50/50 border-gray-100';
                           
@@ -442,7 +437,7 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
                                   <div className="flex gap-1">
                                     {[spriteOp1, spriteOp2].map((opSprite, i) => (
                                       <div key={i} className={`w-8 h-8 border rounded-md flex items-center justify-center p-0.5 shadow-sm opacity-90 ${estadoRonda !== 'pendiente' ? 'bg-white/50 border-gray-300' : 'bg-white border-gray-200'}`}>
-                                        {opSprite ? <img src={opSprite} alt="Oponente" className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} /> : <span className="text-[10px] text-gray-300 font-bold">-</span>}
+                                        {opSprite ? <img src={opSprite} alt="Oponente" className="w-full h-full object-contain" onError={(e: any) => { e.currentTarget.style.display = 'none'; }} /> : <span className="text-[10px] text-gray-300 font-bold">-</span>}
                                       </div>
                                     ))}
                                   </div>
