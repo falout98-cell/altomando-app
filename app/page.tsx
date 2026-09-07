@@ -101,9 +101,9 @@ export default function Home() {
     <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
       
       {/* Tarjeta Principal - Cuartel General */}
-      <div className="bg-white rounded-2xl border-[3px] border-[#b67b4c] shadow-sm p-6 sm:p-8 mb-8 flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
+      <div className="bg-white rounded-2xl border-[3px] border-[#5B493B] shadow-sm p-6 sm:p-8 mb-8 flex flex-col md:flex-row justify-between items-center gap-6 relative overflow-hidden">
         
-        <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#b67b4c]/10 rounded-full blur-2xl pointer-events-none"></div>
+        <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#5B493B]/10 rounded-full blur-2xl pointer-events-none"></div>
         <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-gray-200/50 rounded-full blur-2xl pointer-events-none"></div>
 
         {/* AQUÍ ESTÁ EL CAMBIO DEL ESCUDO */}
@@ -115,7 +115,7 @@ export default function Home() {
           />
           <div>
             <h1 className="text-4xl font-black text-gray-900 tracking-widest uppercase drop-shadow-sm">Alto Mando</h1>
-            <p className="text-sm font-bold text-[#b67b4c] uppercase tracking-widest mt-1">Cuartel General</p>
+            <p className="text-sm font-bold text-[#5B493B] uppercase tracking-widest mt-1">Cuartel General</p>
           </div>
         </div>
 
@@ -124,7 +124,7 @@ export default function Home() {
           {avatarEntrenador ? (
             <img src={avatarEntrenador} alt="Avatar" className="w-10 h-10 rounded-full shadow-sm object-cover border border-gray-300" />
           ) : (
-            <div className="w-10 h-10 bg-[#b67b4c] text-white rounded-full flex items-center justify-center font-black text-lg shadow-sm uppercase">
+            <div className="w-10 h-10 bg-[#5B493B] text-white rounded-full flex items-center justify-center font-black text-lg shadow-sm uppercase">
               {nombreEntrenador.charAt(0)} 
             </div>
           )}
@@ -148,7 +148,7 @@ export default function Home() {
             <>
               <div className="w-px h-8 bg-gray-300 mx-2"></div>
               <button 
-                className="text-xs font-bold text-[#b67b4c] hover:text-orange-700 transition-colors flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-[#b67b4c]/30 shadow-sm cursor-pointer"
+                className="text-xs font-bold text-[#5B493B] hover:text-orange-700 transition-colors flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-lg border border-[#5B493B]/30 shadow-sm cursor-pointer"
                 onClick={iniciarSesionGoogle}
               >
                 <span>Google Login</span>
@@ -160,7 +160,7 @@ export default function Home() {
 
       {/* Cabecera de la sección de Torneos */}
       <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 border-b-2 border-gray-200 pb-4">
-        <h2 className="text-2xl font-black text-[#b67b4c] uppercase tracking-wider">Próximos Torneos</h2>
+        <h2 className="text-2xl font-black text-[#5B493B] uppercase tracking-wider">Próximos Torneos</h2>
         
         {usuario && (
           <button 
@@ -175,7 +175,7 @@ export default function Home() {
 
       {/* Lista de Torneos */}
       {cargando ? (
-        <div className="flex justify-center items-center h-32 text-[#b67b4c] font-bold">
+        <div className="flex justify-center items-center h-32 text-[#5B493B] font-bold">
           Cargando torneos...
         </div>
       ) : torneos.length === 0 ? (
@@ -193,7 +193,7 @@ export default function Home() {
       {/* MODAL PARA CREAR TORNEO */}
       {modalAbierto && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4">
-          <div className="bg-white rounded-2xl border-[3px] border-[#b67b4c] shadow-2xl w-full max-w-md p-6 relative animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-2xl border-[3px] border-[#5B493B] shadow-2xl w-full max-w-md p-6 relative animate-in fade-in zoom-in-95 duration-200">
             
             <h3 className="text-lg font-black text-gray-900 uppercase tracking-wide mb-4 border-b border-gray-200 pb-2">
               Programar Nuevo Torneo
@@ -207,7 +207,7 @@ export default function Home() {
                   type="date" 
                   value={nuevaFecha} 
                   onChange={e => setNuevaFecha(e.target.value)} 
-                  className="w-full text-xs font-bold text-gray-800 bg-gray-50 p-2.5 rounded-lg border border-gray-300 outline-none focus:border-[#b67b4c] cursor-pointer"
+                  className="w-full text-xs font-bold text-gray-800 bg-gray-50 p-2.5 rounded-lg border border-gray-300 outline-none focus:border-[#5B493B] cursor-pointer"
                 />
               </div>
 
@@ -218,7 +218,7 @@ export default function Home() {
                   value={nuevoLugar} 
                   onChange={e => setNuevoLugar(e.target.value)} 
                   placeholder="Ej. Cartagena"
-                  className="w-full text-xs font-bold text-gray-800 bg-gray-50 p-2.5 rounded-lg border border-gray-300 outline-none focus:border-[#b67b4c]"
+                  className="w-full text-xs font-bold text-gray-800 bg-gray-50 p-2.5 rounded-lg border border-gray-300 outline-none focus:border-[#5B493B]"
                 />
               </div>
 
@@ -227,7 +227,7 @@ export default function Home() {
                 <select 
                   value={nuevoTipo} 
                   onChange={e => setNuevoTipo(e.target.value)}
-                  className="w-full text-xs font-bold text-gray-800 bg-gray-50 p-2.5 rounded-lg border border-gray-300 outline-none focus:border-[#b67b4c] cursor-pointer"
+                  className="w-full text-xs font-bold text-gray-800 bg-gray-50 p-2.5 rounded-lg border border-gray-300 outline-none focus:border-[#5B493B] cursor-pointer"
                 >
                   <option value="Local">Local</option>
                   <option value="Challenge">Challenge</option>
@@ -247,7 +247,7 @@ export default function Home() {
                 </button>
                 <button 
                   type="submit"
-                  className="px-5 py-2 text-xs font-black text-white bg-[#b67b4c] hover:bg-orange-800 rounded-lg transition shadow-sm cursor-pointer"
+                  className="px-5 py-2 text-xs font-black text-white bg-[#5B493B] hover:bg-orange-800 rounded-lg transition shadow-sm cursor-pointer"
                 >
                   Guardar Torneo
                 </button>

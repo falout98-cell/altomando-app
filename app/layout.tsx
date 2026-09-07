@@ -14,7 +14,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="bg-gray-100 min-h-screen flex flex-col">
+      <body className="bg-[#F9F1DC] min-h-screen flex flex-col">
         {/* Barra de navegación global */}
         <Navbar />
         

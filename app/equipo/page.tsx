@@ -88,14 +88,14 @@ export default function EquipoPage() {
   }
 
   if (cargando) {
-    return <div className="flex justify-center items-center h-64 text-[#b67b4c] font-bold">Cargando Roster...</div>
+    return <div className="flex justify-center items-center h-64 text-[#5B493B] font-bold">Cargando Roster...</div>
   }
 
   return (
     <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
       
       {/* Cabecera de la página */}
-      <div className="mb-8 border-b-4 border-[#b67b4c] pb-4">
+      <div className="mb-8 border-b-4 border-[#5B493B] pb-4">
         <h1 className="text-3xl font-black text-gray-900 uppercase tracking-widest">Alto Mando</h1>
         <p className="text-gray-500 font-bold mt-1">Roster Oficial y Estadísticas Globales</p>
       </div>
@@ -114,7 +114,7 @@ export default function EquipoPage() {
             <Link 
               href={`/equipo/${jugador.id}`} 
               key={jugador.id}
-              className="bg-white rounded-2xl border-[3px] border-gray-200 hover:border-[#b67b4c] shadow-sm hover:shadow-lg transition-all duration-300 p-5 group flex flex-col items-center cursor-pointer relative"
+              className="bg-white rounded-2xl border-[3px] border-gray-200 hover:border-[#5B493B] shadow-sm hover:shadow-lg transition-all duration-300 p-5 group flex flex-col items-center cursor-pointer relative"
             >
               {/* Avatar: Sprite del Main Pokémon o Letra genérica */}
               {spriteUrl ? (
@@ -125,12 +125,12 @@ export default function EquipoPage() {
                     className="w-full h-full object-contain drop-shadow-md scale-110" 
                     onError={(e: any) => { e.currentTarget.style.display = 'none'; }} 
                   />
-                  <div className="absolute -bottom-2 bg-[#b67b4c] text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow-sm border border-white">
+                  <div className="absolute -bottom-2 bg-[#5B493B] text-white text-[9px] font-black uppercase px-2 py-0.5 rounded-full shadow-sm border border-white">
                     Main
                   </div>
                 </div>
               ) : (
-                <div className="w-16 h-16 bg-gray-100 group-hover:bg-[#b67b4c] transition-colors rounded-full flex items-center justify-center mb-4 shadow-inner">
+                <div className="w-16 h-16 bg-gray-100 group-hover:bg-[#5B493B] transition-colors rounded-full flex items-center justify-center mb-4 shadow-inner">
                   <span className="text-2xl font-black text-gray-400 group-hover:text-white">
                     {jugador.nombre.charAt(0).toUpperCase()}
                   </span>
@@ -146,7 +146,7 @@ export default function EquipoPage() {
               <div className="w-full bg-gray-50 rounded-xl p-3 border border-gray-100 mt-auto">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-xs font-bold text-gray-400 uppercase">Récord (Juegos)</span>
-                  <span className="text-xs font-black text-[#b67b4c]">{winRate}% WR</span>
+                  <span className="text-xs font-black text-[#5B493B]">{winRate}% WR</span>
                 </div>
                 
                 <div className="flex justify-between text-center gap-2">
@@ -166,7 +166,7 @@ export default function EquipoPage() {
               </div>
 
               <div className="mt-4 w-full text-center">
-                <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest group-hover:text-[#b67b4c] transition-colors">
+                <span className="text-[10px] font-black text-gray-300 uppercase tracking-widest group-hover:text-[#5B493B] transition-colors">
                   Ver Perfil Completo ➔
                 </span>
               </div>

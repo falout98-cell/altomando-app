@@ -88,7 +88,7 @@ function PokemonMazoInput({ value, onChange, placeholder, size = "normal" }: any
          className={`w-full font-bold text-gray-800 bg-transparent outline-none placeholder-gray-300 ${size === 'small' ? 'text-[10px]' : 'text-xs'}`}
        />
        {enfocado && sugerencias.length > 0 && (
-          <div className="absolute top-full left-0 z-50 bg-white border-2 border-[#b67b4c] rounded-md shadow-xl w-36 max-h-48 overflow-y-auto mt-1">
+          <div className="absolute top-full left-0 z-50 bg-white border-2 border-[#5B493B] rounded-md shadow-xl w-36 max-h-48 overflow-y-auto mt-1">
              {sugerencias.map((p: string) => (
                 <div
                   key={p}
@@ -99,7 +99,7 @@ function PokemonMazoInput({ value, onChange, placeholder, size = "normal" }: any
                     setSugerencias([]);
                     setEnfocado(false);
                   }}
-                  className="px-3 py-2 text-xs text-gray-700 hover:bg-[#b67b4c] hover:text-white cursor-pointer capitalize font-bold border-b border-gray-100 last:border-0"
+                  className="px-3 py-2 text-xs text-gray-700 hover:bg-[#5B493B] hover:text-white cursor-pointer capitalize font-bold border-b border-gray-100 last:border-0"
                 >
                   {p}
                 </div>
@@ -283,11 +283,11 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
   const obtenerColorTipo = (tipo: string) => {
     switch (tipo) {
       case 'Local': return 'bg-white text-gray-700 border border-gray-300';
-      case 'Challenge': return 'bg-[#b67b4c] text-white';
+      case 'Challenge': return 'bg-[#5B493B] text-white';
       case 'Cup': return 'bg-blue-600 text-white';
       case 'Regional': return 'bg-purple-700 text-white';
       case 'Mundial': return 'bg-amber-500 text-white font-black shadow-sm';
-      default: return 'bg-[#b67b4c] text-white';
+      default: return 'bg-[#5B493B] text-white';
     }
   }
 
@@ -307,7 +307,7 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
   const esAdminGlobal = usuarioEmail === ADMIN_EMAIL;
 
   return (
-    <div className="bg-white p-5 rounded-2xl border-[3px] border-[#b67b4c] shadow-sm mb-4 relative overflow-hidden">
+    <div className="bg-white p-5 rounded-2xl border-[3px] border-[#5B493B] shadow-sm mb-4 relative overflow-hidden">
       
       <div onClick={() => setAbierto(!abierto)} className="cursor-pointer flex justify-between items-center relative z-10">
         <div>
@@ -351,10 +351,10 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
                 <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
                   <Link 
                     href={`/equipo/${jugador.id}`} 
-                    className={`font-bold text-sm min-w-[130px] hover:underline transition-colors cursor-pointer ${puedeEditar ? 'text-[#b67b4c]' : 'text-gray-800 hover:text-[#b67b4c]'}`}
+                    className={`font-bold text-sm min-w-[130px] hover:underline transition-colors cursor-pointer ${puedeEditar ? 'text-[#5B493B]' : 'text-gray-800 hover:text-[#5B493B]'}`}
                     title={`Ver perfil de ${jugador.nombre}`}
                   >
-                    {jugador.nombre} {puedeEditar && <span className="text-[10px] ml-1 bg-orange-100 text-[#b67b4c] px-1.5 py-0.5 rounded uppercase tracking-wider">Tú</span>}
+                    {jugador.nombre} {puedeEditar && <span className="text-[10px] ml-1 bg-orange-100 text-[#5B493B] px-1.5 py-0.5 rounded uppercase tracking-wider">Tú</span>}
                   </Link>
                   
                   <div className="flex flex-wrap items-center gap-3">
@@ -398,7 +398,7 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-xs font-bold text-gray-500 uppercase">Rondas Suizo (Bo3)</span>
                       {puedeEditar && (
-                        <button onClick={() => añadirRonda(jugador.id)} className="cursor-pointer text-xs font-bold text-[#b67b4c] bg-orange-50 px-3 py-1 rounded-full hover:bg-orange-100 transition border border-orange-200">
+                        <button onClick={() => añadirRonda(jugador.id)} className="cursor-pointer text-xs font-bold text-[#5B493B] bg-orange-50 px-3 py-1 rounded-full hover:bg-orange-100 transition border border-orange-200">
                           + Añadir ronda
                         </button>
                       )}
