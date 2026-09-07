@@ -106,9 +106,17 @@ export default function Home() {
         <div className="absolute -right-10 -top-10 w-40 h-40 bg-[#b67b4c]/10 rounded-full blur-2xl pointer-events-none"></div>
         <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-gray-200/50 rounded-full blur-2xl pointer-events-none"></div>
 
-        <div className="text-center md:text-left z-10">
-          <h1 className="text-4xl font-black text-gray-900 tracking-widest uppercase drop-shadow-sm">Alto Mando</h1>
-          <p className="text-sm font-bold text-[#b67b4c] uppercase tracking-widest mt-1">Cuartel General</p>
+        {/* AQUÍ ESTÁ EL CAMBIO DEL ESCUDO */}
+        <div className="text-center md:text-left z-10 flex flex-col md:flex-row items-center gap-4">
+          <img 
+            src="/logo.png" 
+            alt="Escudo Alto Mando" 
+            className="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-md"
+          />
+          <div>
+            <h1 className="text-4xl font-black text-gray-900 tracking-widest uppercase drop-shadow-sm">Alto Mando</h1>
+            <p className="text-sm font-bold text-[#b67b4c] uppercase tracking-widest mt-1">Cuartel General</p>
+          </div>
         </div>
 
         {/* Panel de Usuario Conectado */}

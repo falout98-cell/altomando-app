@@ -19,9 +19,11 @@ export default function Navbar() {
           {/* Logo / Nombre del Equipo */}
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center gap-2 group">
-              <div className="w-8 h-8 bg-white text-[#b67b4c] rounded-full flex items-center justify-center font-black text-lg shadow-sm group-hover:scale-105 transition-transform">
-                A
-              </div>
+              <img 
+                src="/logo.png" 
+                alt="Escudo Alto Mando" 
+                className="w-10 h-10 object-contain drop-shadow-sm group-hover:scale-105 transition-transform bg-white rounded-full p-0.5" 
+              />
               <span className="text-xl font-black tracking-widest uppercase hidden sm:block">
                 Alto Mando
               </span>

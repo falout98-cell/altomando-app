@@ -36,7 +36,7 @@ function PokemonMazoInput({ value, onChange, placeholder, size = "normal" }: any
   }, [busqueda, enfocado])
 
   // CORRECCIÓN 1: Cambiado 'null' por 'undefined' para que Vercel no se queje
-  const spriteUrl = value ? `https://play.pokemonshowdown.com/sprites/dex/${value.toLowerCase().replace(/[^a-z0-9]/g, '')}.png` : undefined;
+  const spriteUrl = value ? `https://play.pokemonshowdown.com/sprites/gen5/${value.toLowerCase().replace(/[^a-z0-9]/g, '')}.png` : undefined;
 
   if (value) {
     return (
@@ -294,7 +294,7 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
   const obtenerSpriteUrl = (nombrePokemon: string) => {
     if (!nombrePokemon) return undefined;
     const formatted = nombrePokemon.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
-    return `https://play.pokemonshowdown.com/sprites/dex/${formatted}.png`;
+    return `https://play.pokemonshowdown.com/sprites/gen5/${formatted}.png`;
   }
 
   const totalVoy = Object.values(asistencias).filter(e => e === 'Voy').length;

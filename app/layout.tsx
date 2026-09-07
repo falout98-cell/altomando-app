@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar'
 export const metadata = {
   title: 'Alto Mando - Tracker',
   description: 'Gestor de torneos y perfiles de Alto Mando',
+  manifest: "/manifest.json",
 }
 
 export default function RootLayout({
