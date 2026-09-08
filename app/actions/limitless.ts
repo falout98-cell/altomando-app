@@ -16,6 +16,7 @@ export async function obtenerTorneosLimitless(minJugadores: number) {
     const $ = cheerio.load(html)
     const torneos: any[] = []
 
+    // FASE 1: Extraer datos básicos
     $('table tbody tr').each((index, element) => {
       const fila = $(element)
       
@@ -37,7 +38,7 @@ export async function obtenerTorneosLimitless(minJugadores: number) {
       
       let jugadores = 0
       let ganador = "Desconocido"
-      let linkGanador = "" // 🎯 Variable para guardar el link directo al mazo
+      let linkGanador = "" 
       
       for (let i = indiceNombre + 2; i < textosValidos.length; i++) {
           const matchNum = textosValidos[i].match(/\d+/)
@@ -48,20 +49,15 @@ export async function obtenerTorneosLimitless(minJugadores: number) {
           }
       }
 
-      // 🎯 MISIÓN FRANCOTIRADOR: Buscar el link exacto de la lista del ganador
       if (ganador !== "Desconocido") {
         fila.find('a').each((_, el) => {
           if ($(el).text().trim() === ganador) {
             const href = $(el).attr('href')
-            if (href) {
-              // Construimos el enlace directo a su perfil de ese torneo
-              linkGanador = 'https://play.limitlesstcg.com' + href
-            }
+            if (href) linkGanador = 'https://play.limitlesstcg.com' + href
           }
         })
       }
       
-      // Fecha
       let fecha = "RECIENTE"
       const timeAttr = fila.find('[data-time]').attr('data-time')
       if (timeAttr) {
@@ -73,7 +69,6 @@ export async function obtenerTorneosLimitless(minJugadores: number) {
           fecha = textosValidos[0].toUpperCase()
       }
 
-      // Usamos el link del ganador si existe; si no, por seguridad, mandamos al torneo general
       const linkFinal = linkGanador !== "" ? linkGanador : linkTorneo
 
       if (jugadores >= minJugadores) {
@@ -84,13 +79,62 @@ export async function obtenerTorneosLimitless(minJugadores: number) {
           organizador,
           jugadores,
           ganador,
-          link: linkFinal, // 🎯 Usamos el link infiltrado
-          sprites: ["0", "0", "0"]
+          link: linkFinal,
+          sprites: []
         })
       }
     })
 
-    return torneos.slice(0, 15)
+    const top15 = torneos.slice(0, 15)
+
+    // FASE 2: Infiltración Quirúrgica (Sprites reales sin mezclar clasificados)
+    const torneosConSprites = await Promise.all(top15.map(async (torneo) => {
+      try {
+        if (!torneo.link || torneo.link === '#') return torneo
+
+        const resJugador = await fetch(torneo.link, {
+          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36' },
+          cache: 'no-store'
+        })
+        
+        if (!resJugador.ok) return torneo
+
+        const htmlJugador = await resJugador.text()
+        const $$ = cheerio.load(htmlJugador)
+        let spritesReales: string[] = []
+
+        // 🎯 EL TRUCO DE LA CAJA
+        // Buscamos el primer sprite de la página (El Pokémon #1 del ganador)
+        const primerSprite = $$('img[src*="pokemon"]').first()
+        
+        if (primerSprite.length > 0) {
+          // Seleccionamos la "caja HTML" que envuelve a ese Pokémon
+          const cajaContenedora = primerSprite.parent()
+          
+          // Extraemos SOLO los Pokémon que compartan esa misma caja (su mazo real)
+          cajaContenedora.find('img[src*="pokemon"]').each((_, el) => {
+            const src = $$(el).attr('src')
+            if (src) {
+              const fullSrc = src.startsWith('http') ? src : 'https://play.limitlesstcg.com' + src
+              if (!spritesReales.includes(fullSrc)) {
+                spritesReales.push(fullSrc)
+              }
+            }
+          })
+        }
+
+        if (spritesReales.length === 0) {
+          spritesReales = ["https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"]
+        }
+
+        return { ...torneo, sprites: spritesReales }
+      } catch (err) {
+        return torneo
+      }
+    }))
+
+    return torneosConSprites
+
   } catch (error) {
     console.error("❌ El bot falló:", error)
     return []

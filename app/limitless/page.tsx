@@ -80,6 +80,24 @@ export default function LimitlessTracker() {
                   <span className="text-[10px] font-black text-gray-400 uppercase">{torneo.organizador}</span>
                 </div>
 
+                {/* 🎯 AQUÍ ESTÁ EL BLOQUE NUEVO DE LOS SPRITES REALES */}
+                {torneo.sprites && torneo.sprites.length > 0 && (
+                  <div className="flex justify-center gap-2 mb-4 p-2 bg-[#F9F1DC]/30 rounded-xl border border-[#F9F1DC] min-h-[60px]">
+                    {torneo.sprites.map((url: string, index: number) => (
+                      <img 
+                        key={index}
+                        src={url}
+                        alt="Pokémon Sprite"
+                        className="w-10 h-10 object-contain drop-shadow-sm"
+                        onError={(e) => { 
+                          // Si falla la imagen, cargamos la Pokeball
+                          e.currentTarget.src = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" 
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+
                 <a 
                   href={torneo.link}
                   target="_blank"
