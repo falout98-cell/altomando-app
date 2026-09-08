@@ -7,7 +7,8 @@ export default function Navbar() {
 
   const navLinks = [
     { name: 'Torneos', href: '/' },
-    { name: 'Roster', href: '/equipo' }
+    { name: 'Roster', href: '/equipo' },
+    { name: 'Limitless', href: '/limitless' }
   ]
 
   return (
