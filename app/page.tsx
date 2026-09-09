@@ -38,6 +38,7 @@ export default function Home() {
     }
   }, [])
 
+
   const cargarTorneos = async () => {
     setCargando(true)
     const { data, error } = await supabase
@@ -93,18 +94,14 @@ export default function Home() {
   }
 
   // --- LÓGICA DE FECHAS Y SEPARACIÓN DE TORNEOS ---
-  // Obtenemos la fecha de hoy en formato local (YYYY-MM-DD)
   const hoy = new Date();
-  // Ajuste rápido de zona horaria para evitar bailes de días
   const offset = hoy.getTimezoneOffset()
   const fechaHoyStr = new Date(hoy.getTime() - (offset*60*1000)).toISOString().split('T')[0]
 
-  // Próximos: Fecha mayor o igual a hoy (Ordenados de más cercano a más lejano)
   const proximosTorneos = torneos
     .filter(t => (t.fecha || "") >= fechaHoyStr)
     .sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime())
 
-  // Pasados: Fecha menor a hoy (Ordenados del más reciente al más antiguo)
   const torneosPasados = torneos
     .filter(t => (t.fecha || "") < fechaHoyStr)
     .sort((a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime())
@@ -113,7 +110,7 @@ export default function Home() {
   // --- LÓGICA DEL CALENDARIO ---
   const diasEnMes = new Date(anioActual, mesActual + 1, 0).getDate()
   const diaInicioMes = new Date(anioActual, mesActual, 1).getDay()
-  const celdasVacias = diaInicioMes === 0 ? 6 : diaInicioMes - 1 // Lunes como primer día
+  const celdasVacias = diaInicioMes === 0 ? 6 : diaInicioMes - 1 
 
   const nombresMeses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
 
@@ -223,7 +220,6 @@ export default function Home() {
                   `}
                 >
                   <span>{diaNum}</span>
-                  {/* Puntitos de colores para los torneos */}
                   {torneosDelDia.length > 0 && (
                     <div className="flex gap-0.5 mt-1">
                       {torneosDelDia.slice(0, 3).map((t, idx) => (
