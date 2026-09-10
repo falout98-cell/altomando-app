@@ -7,7 +7,8 @@ const PTS_CHALLENGE = [
   { label: "-", value: 0 },
   { label: "1º (+15 CP)", value: 15 },
   { label: "2º (+12 CP)", value: 12 },
-  { label: "3º/4º (+10 CP)", value: 10 }
+  { label: "3º/4º (+10 CP)", value: 10 },
+  { label: "5º-8º (+8 CP)", value: 8 }
 ]
 
 const PTS_CUP = [
