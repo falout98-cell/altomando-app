@@ -35,7 +35,6 @@ function PokemonMazoInput({ value, onChange, placeholder, size = "normal" }: any
     }
   }, [busqueda, enfocado])
 
-  // CORRECCIÓN 1: Cambiado 'null' por 'undefined' para que Vercel no se queje
   const spriteUrl = value ? `https://play.pokemonshowdown.com/sprites/gen5/${value.toLowerCase().replace(/[^a-z0-9]/g, '')}.png` : undefined;
 
   if (value) {
@@ -133,7 +132,6 @@ function Bo3Selector({ resultado, onChange }: any) {
 
   return (
     <div className="flex gap-1">
-      {/* CORRECCIÓN 2: Declarado explícitamente el tipo de p y de i */}
       {partes.map((p: string, i: number) => (
          <select 
             key={i} 
@@ -151,7 +149,6 @@ function Bo3Selector({ resultado, onChange }: any) {
   )
 }
 
-// Función para determinar el estado de la ronda (Compatible con Bo1 y Bo3)
 const obtenerEstadoRonda = (resultado: string) => {
   if (!resultado) return 'pendiente';
 
@@ -342,6 +339,17 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
             const mazoJugador = mazos[jugador.id] || {}
             const rondasJugador = rondas[jugador.id] || []
             
+            // --- NUEVO: CÁLCULO DE W/L/T DEL TORNEO ---
+            let matchW = 0, matchL = 0, matchT = 0;
+            rondasJugador.forEach(r => {
+              const estado = obtenerEstadoRonda(r.resultado || "");
+              if (estado === 'victoria') matchW++;
+              else if (estado === 'derrota') matchL++;
+              else if (estado === 'empate') matchT++;
+            });
+            const tieneRondas = matchW > 0 || matchL > 0 || matchT > 0;
+            // ------------------------------------------
+
             const esSuPerfil = usuarioEmail && usuarioEmail === jugador.email
             const puedeEditar = esAdminGlobal || esSuPerfil
 
@@ -349,12 +357,20 @@ export default function TorneoCard({ torneo }: { torneo: any }) {
               <div key={jugador.id} className={`flex flex-col py-3 px-4 rounded-xl border shadow-sm gap-3 transition-colors ${puedeEditar ? 'bg-orange-50/30 border-orange-200' : 'bg-gray-50 border-gray-200'}`}>
                 
                 <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+                  
+                  {/* Aquí está modificada la presentación del nombre para incluir la chapita W/L/T */}
                   <Link 
                     href={`/equipo/${jugador.id}`} 
-                    className={`font-bold text-sm min-w-[130px] hover:underline transition-colors cursor-pointer ${puedeEditar ? 'text-[#5B493B]' : 'text-gray-800 hover:text-[#5B493B]'}`}
+                    className={`font-bold text-sm min-w-[130px] hover:underline transition-colors cursor-pointer flex flex-wrap items-center gap-1.5 ${puedeEditar ? 'text-[#5B493B]' : 'text-gray-800 hover:text-[#5B493B]'}`}
                     title={`Ver perfil de ${jugador.nombre}`}
                   >
-                    {jugador.nombre} {puedeEditar && <span className="text-[10px] ml-1 bg-orange-100 text-[#5B493B] px-1.5 py-0.5 rounded uppercase tracking-wider">Tú</span>}
+                    <span>{jugador.nombre}</span>
+                    {puedeEditar && <span className="text-[10px] bg-orange-100 text-[#5B493B] px-1.5 py-0.5 rounded uppercase tracking-wider">Tú</span>}
+                    {estadoActual === 'Voy' && tieneRondas && (
+                      <span className="text-[9px] font-black tracking-widest px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-300 shadow-sm whitespace-nowrap">
+                        {matchW}W-{matchL}L-{matchT}T
+                      </span>
+                    )}
                   </Link>
                   
                   <div className="flex flex-wrap items-center gap-3">

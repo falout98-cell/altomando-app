@@ -267,14 +267,23 @@ export default function PerfilJugadorPage() {
               const mazo2 = torneo.mazos.find((m: any) => m.slot === 2)?.pokemon_principal || ''
               const sp1 = obtenerSpriteUrl(mazo1)
               const sp2 = obtenerSpriteUrl(mazo2)
+              const tieneRondas = torneo.stats.W > 0 || torneo.stats.L > 0 || torneo.stats.T > 0;
 
               return (
                 <div key={torneo.id} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
                   
                   <div className="bg-gray-50 p-4 border-b border-gray-200 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                     <div>
-                      <h4 className="font-bold text-gray-800">{torneo.nombre}</h4>
-                      <p className="text-xs font-medium text-gray-500 mt-0.5">{torneo.fecha} • {torneo.lugar}</p>
+                      {/* AQUÍ ESTÁ EL CAMBIO TÁCTICO: Nombre + Chapita de Resultado */}
+                      <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                        <h4 className="font-bold text-gray-800">{torneo.nombre}</h4>
+                        {tieneRondas && (
+                          <span className="text-[10px] font-black tracking-widest px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 border border-gray-300 shadow-sm whitespace-nowrap">
+                            {torneo.stats.W}W-{torneo.stats.L}L-{torneo.stats.T}T
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs font-medium text-gray-500">{torneo.fecha} • {torneo.lugar}</p>
                     </div>
                     
                     <div className="flex items-center gap-4">
