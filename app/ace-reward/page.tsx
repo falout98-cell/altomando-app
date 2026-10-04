@@ -19,6 +19,21 @@ const PTS_CUP = [
   { label: "5º-8º (+25 CP)", value: 25 }
 ]
 
+const PTS_REGIONAL = [
+  { label: "-", value: 0 },
+  { label: "1º (+350 CP)", value: 350 },
+  { label: "2º (+325 CP)", value: 325 },
+  { label: "3º/4º (+300 CP)", value: 300 },
+  { label: "5º-8º (+280 CP)", value: 280 },
+  { label: "9º-16º (+200 CP)", value: 200 },
+  { label: "17º-32º (+160 CP)", value: 160 },
+  { label: "33º-64º (+120 CP)", value: 120 },
+  { label: "65º-128º (+80 CP)", value: 80 },
+  { label: "129º-256º (+60 CP)", value: 60 },
+  { label: "257º-512º (+45 CP)", value: 45 },
+  { label: "513º-1024º (+22 CP)", value: 22 }
+]
+
 export default function AceRewardPage() {
   const [jugadores, setJugadores] = useState<any[]>([])
   const [jugadorSeleccionado, setJugadorSeleccionado] = useState<any>(null)
@@ -48,22 +63,32 @@ export default function AceRewardPage() {
     b.total - a.total || a.nombre.localeCompare(b.nombre)
   )
 
-  const recalcularTotal = (challenges: number[], cups: number[]) => {
-    const sumaCh = challenges.reduce((a, b) => a + b, 0)
-    const sumaCu = cups.reduce((a, b) => a + b, 0)
-    return sumaCh + sumaCu
+  const recalcularTotal = (challenges: number[], cups: number[], regionales: number[]) => {
+    const sumaCh = (challenges || []).reduce((a, b) => a + b, 0)
+    const sumaCu = (cups || []).reduce((a, b) => a + b, 0)
+    const sumaReg = (regionales || []).reduce((a, b) => a + b, 0)
+    return sumaCh + sumaCu + sumaReg
   }
 
   // 2. Actualizar en pantalla y guardar en Supabase a la vez
-  const actualizarPuntos = async (categoria: 'challenges' | 'cups', index: number, valor: number) => {
+  const actualizarPuntos = async (categoria: 'challenges' | 'cups' | 'regionales', index: number, valor: number) => {
     if (!jugadorSeleccionado) return
 
-    const nuevosDatos = [...jugadorSeleccionado[categoria]]
+    // Protegemos con arrays por defecto por si el jugador aún no tenía datos en esa categoría
+    const arrayPorDefecto = categoria === 'regionales' ? [0, 0, 0, 0, 0] : [0, 0, 0, 0];
+    const datosActuales = jugadorSeleccionado[categoria] || arrayPorDefecto;
+    
+    const nuevosDatos = [...datosActuales]
     nuevosDatos[index] = valor
     
-    const nuevoTotal = categoria === 'challenges' 
-      ? recalcularTotal(nuevosDatos, jugadorSeleccionado.cups)
-      : recalcularTotal(jugadorSeleccionado.challenges, nuevosDatos)
+    let nuevoTotal = 0;
+    if (categoria === 'challenges') {
+      nuevoTotal = recalcularTotal(nuevosDatos, jugadorSeleccionado.cups, jugadorSeleccionado.regionales)
+    } else if (categoria === 'cups') {
+      nuevoTotal = recalcularTotal(jugadorSeleccionado.challenges, nuevosDatos, jugadorSeleccionado.regionales)
+    } else {
+      nuevoTotal = recalcularTotal(jugadorSeleccionado.challenges, jugadorSeleccionado.cups, nuevosDatos)
+    }
 
     const jugadorActualizado = {
       ...jugadorSeleccionado,
@@ -165,26 +190,55 @@ export default function AceRewardPage() {
 
             <div className="p-6 space-y-8">
               
+              {/* Sección Regionales (NUEVO) */}
+              <div>
+                <h4 className="flex items-center gap-2 font-black text-purple-700 uppercase tracking-widest mb-4 border-b border-purple-200 pb-2">
+                  🌍 Regional Championships (Top 5)
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[0, 1, 2, 3, 4].map((slotIndex) => {
+                    const valorActual = (jugadorSeleccionado.regionales || [0, 0, 0, 0, 0])[slotIndex];
+                    return (
+                      <div key={`regional-${slotIndex}`} className="bg-purple-50 p-3 rounded-xl border border-purple-100">
+                        <label className="block text-[10px] font-bold text-purple-500 uppercase mb-2">Slot {slotIndex + 1}</label>
+                        <select 
+                          value={valorActual}
+                          onChange={(e) => actualizarPuntos('regionales', slotIndex, Number(e.target.value))}
+                          className="w-full text-xs font-bold text-gray-800 bg-white p-2 rounded-lg border border-gray-300 outline-none focus:border-purple-500 cursor-pointer shadow-sm"
+                        >
+                          {PTS_REGIONAL.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+
               {/* Sección Cups */}
               <div>
                 <h4 className="flex items-center gap-2 font-black text-blue-600 uppercase tracking-widest mb-4 border-b border-blue-100 pb-2">
                   🏆 League Cups (Top 4)
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {[0, 1, 2, 3].map((slotIndex) => (
-                    <div key={`cup-${slotIndex}`} className="bg-blue-50/50 p-3 rounded-xl border border-blue-100">
-                      <label className="block text-xs font-bold text-blue-400 uppercase mb-2">Slot {slotIndex + 1}</label>
-                      <select 
-                        value={jugadorSeleccionado.cups[slotIndex]}
-                        onChange={(e) => actualizarPuntos('cups', slotIndex, Number(e.target.value))}
-                        className="w-full text-sm font-bold text-gray-800 bg-white p-2.5 rounded-lg border border-gray-300 outline-none focus:border-blue-500 cursor-pointer shadow-sm"
-                      >
-                        {PTS_CUP.map(opt => (
-                          <option key={opt.value} value={opt.value}>{opt.label}</option>
-                        ))}
-                      </select>
-                    </div>
-                  ))}
+                  {[0, 1, 2, 3].map((slotIndex) => {
+                    const valorActual = (jugadorSeleccionado.cups || [0, 0, 0, 0])[slotIndex];
+                    return (
+                      <div key={`cup-${slotIndex}`} className="bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                        <label className="block text-xs font-bold text-blue-400 uppercase mb-2">Slot {slotIndex + 1}</label>
+                        <select 
+                          value={valorActual}
+                          onChange={(e) => actualizarPuntos('cups', slotIndex, Number(e.target.value))}
+                          className="w-full text-sm font-bold text-gray-800 bg-white p-2.5 rounded-lg border border-gray-300 outline-none focus:border-blue-500 cursor-pointer shadow-sm"
+                        >
+                          {PTS_CUP.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
 
@@ -194,20 +248,23 @@ export default function AceRewardPage() {
                   ⚔️ League Challenges (Top 4)
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {[0, 1, 2, 3].map((slotIndex) => (
-                    <div key={`challenge-${slotIndex}`} className="bg-gray-50 p-3 rounded-xl border border-gray-200">
-                      <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Slot {slotIndex + 1}</label>
-                      <select 
-                        value={jugadorSeleccionado.challenges[slotIndex]}
-                        onChange={(e) => actualizarPuntos('challenges', slotIndex, Number(e.target.value))}
-                        className="w-full text-sm font-bold text-gray-800 bg-white p-2.5 rounded-lg border border-gray-300 outline-none focus:border-[#5B493B] cursor-pointer shadow-sm"
-                      >
-                        {PTS_CHALLENGE.map(opt => (
-                          <option key={opt.value} value={opt.value}>{opt.label}</option>
-                        ))}
-                      </select>
-                    </div>
-                  ))}
+                  {[0, 1, 2, 3].map((slotIndex) => {
+                    const valorActual = (jugadorSeleccionado.challenges || [0, 0, 0, 0])[slotIndex];
+                    return (
+                      <div key={`challenge-${slotIndex}`} className="bg-gray-50 p-3 rounded-xl border border-gray-200">
+                        <label className="block text-xs font-bold text-gray-400 uppercase mb-2">Slot {slotIndex + 1}</label>
+                        <select 
+                          value={valorActual}
+                          onChange={(e) => actualizarPuntos('challenges', slotIndex, Number(e.target.value))}
+                          className="w-full text-sm font-bold text-gray-800 bg-white p-2.5 rounded-lg border border-gray-300 outline-none focus:border-[#5B493B] cursor-pointer shadow-sm"
+                        >
+                          {PTS_CHALLENGE.map(opt => (
+                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                          ))}
+                        </select>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
 
